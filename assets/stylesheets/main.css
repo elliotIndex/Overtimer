@@ -1,0 +1,442 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, btn {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol, ul {
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/*
+Main Colors
+
+#c9c9c9
+#e3e3e3
+#9ad3de
+#89bdd3
+*/
+
+
+/*
+  ========================================
+  Custom Styles
+  ========================================
+*/
+
+body {
+  background: #9ad3de;
+  background: -webkit-linear-gradient(to right, #89bdd3, #9ad3de);
+  background: -moz-linear-gradient(to right, #89bdd3, #9ad3de);
+  background: linear-gradient(to right, #89bdd3, #89bdFF);
+  color: #e3e3e3;
+  font: 300 16px/22px "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+h1, h2, h3, h4, th {
+  color: #FFF;
+}
+
+h1 {
+  font-size: 36px;
+  line-height: 44px;
+}
+
+h2, th {
+  font-size: 24px;
+  line-height: 44px;
+}
+
+h3 {
+  font-size: 21px;
+}
+
+h4 {
+  font-size: 18px;
+}
+
+h5 {
+  color: #FFF;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+strong {
+  font-weight: 400;
+}
+
+cite, em {
+  font-style: italic;
+}
+
+/*
+  ========================================
+  Links
+  ========================================
+*/
+
+a {
+  color: #FFF;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #c9c9c9;
+}
+
+p a {
+  border-bottom: 1px solid #dfe2e5;
+}
+
+.teaser a:hover h3 {
+  color: #a9b2b9;
+}
+
+/*
+  ========================================
+  Clearfix
+  ========================================
+*/
+.group:before,
+.group:after {
+  content: "";
+  display: table;
+}
+
+.group:after {
+  clear: both;
+}
+
+.group {
+  clear: both;
+  *zoom: 1;
+}
+
+/*
+  ========================================
+  Typography
+  ========================================
+*/
+
+h1, h3, h4, h5, p {
+  margin-bottom: 22px;
+}
+
+/*
+  ========================================
+  Primary header
+  ========================================
+*/
+
+.logo {
+  border-top: 4px solid #FFF;
+  float: left;
+  margin-left: 10%;
+  font-size: 48px;
+  font-weight: 100;
+  letter-spacing: .5px;
+  line-height: 44px;
+  padding: 40px 0 22px 0;
+  text-transform: uppercase;
+}
+
+/*
+  ========================================
+  Primary header, footer
+  ========================================
+*/
+
+.primary-footer {
+  padding-bottom: 44px;
+  padding-top: 44px;
+  color: #648880;
+  font-size: 14px;
+  margin-left: 10%;
+}
+
+.primary-footer small {
+  float: left;
+  font-weight: 400;
+}
+
+.primary-header a,
+.primary-footer a {
+  color: #fff;
+}
+.primary-header a:hover,
+.primary-footer a:hover {
+  color: #648880;
+}
+
+/*
+  ========================================
+  Main Body
+  ========================================
+*/
+
+.primary-body {
+  display: inline-block;
+  width: 980px;
+  border: 1px solid #FFF;
+  border-radius: 30px;
+  margin: 10px 0 50px 12%;
+  padding-bottom: 22px;
+  text-align: left;
+  background-color: rgba(220, 220, 250, 0.1);
+}
+
+.body-upper {
+  display: block;
+}
+
+/*
+  ========================================
+   Body Header
+  ========================================
+*/
+.body-header {
+  display: inline-block;
+  padding: 1px 80px 1px 10px;
+  margin: 10px 10px 20px 52px;
+  width: auto;
+  border-bottom: 1px solid #FFF;
+  cursor: default;
+}
+
+/*
+  ========================================
+   Body Tweets
+  ========================================
+*/
+
+.primary-body .tweet-list {
+  width: 100%;
+}
+
+.primary-body .tweet-container {
+  display: block;
+  margin: 5px 45px 5px 50px;
+  padding: 1px;
+  width: 880px;
+  height: auto;
+  border: 1px solid #FFF;
+  border-radius: 30px;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.3);
+  vertical-align: middle;
+}
+
+.tweet-container:first-child {
+  margin-top: 30px;
+}
+
+.primary-body .tweet-handle {
+  display: inline-block;
+  width: 200px;
+  margin: 7px 20px;
+  font-size: 20px;
+  color: #89eeee;
+  position: relative;
+  left: 0;
+  cursor: pointer;
+}
+
+.primary-body .tweet-text {
+  color: #EFF;
+  display: inline;
+  width: 400px;
+  padding-left: 20px;
+  text-align: center;
+}
+
+.primary-body .time-stamp {
+  color: rgba(255, 255, 255, 0.5);;
+  float: right;
+  margin: 7px 8px 0 0;
+  font-size: 12px;
+
+}
+
+/*
+  ========================================
+   Body buttons
+  ========================================
+*/
+
+.primary-button {
+  color: #fff;
+  display: inline-block;
+  float: right;
+  margin: 20px 10px;
+  /*border: 1px solid #666;*/
+  border-radius: 20px;
+  padding: 3px 10px;
+  background: -webkit-linear-gradient(to bottom,  rgba(100,100,100,.3), rgba(0,0,0,.3));
+  background: -moz-linear-gradient(to bottom,  rgba(100,100,100,.3), rgba(0,0,0,.3));
+  background: linear-gradient(to bottom,  rgba(100,100,100,.3), rgba(0,0,0,.3)); /* W3C */
+  cursor: pointer;
+}
+
+.primary-button:hover  {
+  color: #ddd;
+  background: -webkit-linear-gradient(to bottom,  rgba(0,0,0,.3), rgba(100,100,100,.3));
+  background: -moz-linear-gradient(to bottom,  rgba(0,0,0,.3), rgba(100,100,100,.3));
+  background: linear-gradient(to bottom,  rgba(0,0,0,.3), rgba(100,100,100,.3)); /* W3C */
+
+}
+
+.pressed {
+  color: #FFF;
+  background: -webkit-linear-gradient(to bottom,  rgba(0,0,0,.3), rgba(100,100,100,.3));
+  background: -moz-linear-gradient(to bottom,  rgba(0,0,0,.3), rgba(100,100,100,.3));
+  background: linear-gradient(to bottom,  rgba(50,250,50,.3), rgba(10,200,10,.5)); /* W3C */
+}
+
+.pressed:hover {
+  color: #FFF;
+  background: -webkit-linear-gradient(to bottom,  rgba(0,0,0,.3), rgba(100,100,100,.3));
+  background: -moz-linear-gradient(to bottom,  rgba(0,0,0,.3), rgba(100,100,100,.3));
+  background: linear-gradient(to bottom,  rgba(0,250,0,.3), rgba(100,250,100,.3)); /* W3C */
+}
+.auto-update {
+  margin-right: 20px;
+}
+
+/*
+  ========================================
+  User Tweets
+  ========================================
+*/
+.user-tweet-area {
+  display: block;
+  height: 50px;
+  margin: 20px 40px 30px 40px;
+  border: 1px solid #EEE;
+  border-radius: 50px;
+}
+
+.tweet-input {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0 47px 0;
+  height: 40px;
+  width: 690px;
+  font: 300 16px/22px "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: solid 1px #dcdcdc;
+  transition: box-shadow 0.3s, border 0.3s;
+
+  appearance: none;
+  box-shadow: none;
+  border-radius: 100px;
+  padding: 0 30px;
+}
+
+.tweet-input:focus {
+  outline: none;
+  border: solid 1px #707070;
+  box-shadow: 0 0 5px 1px #969696;
+}
+
+.tweet-img, .arrow-img {
+  display: inline-block;
+  content: "";
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  overflow: hidden;
+  text-indent: -9999;
+}
+
+.tweet-img {
+  height: 52px;
+  width: 52px;
+  background: url("../images/twitterbirdsprite.png");
+  margin-left: 15px;
+}
+
+.tweet-img:hover {
+  background-position: -50px 0;
+}
+
+.arrow-img {
+  background: url("../images/sprite-arrow-nav.png");
+  margin-left: 15px;
+  height: 40px;
+  width: 40px;
+  margin: 0 0 7px 18px;
+  background-position: 0 -40px;
+}
+
+.arrow-img:hover {
+  background-position: 0 -120px;
+}
+
+
+
+
+/*
+  ========================================
+  Navigation
+  ========================================
+*/
+
+.nav {
+  text-align: right;
+  margin-right: 10%;
+}
+
+.primary-nav {
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+
+.nav li {
+  display: inline-block;
+  margin: 20px 10px;
+  vertical-align: top;
+}
+
+.nav li:last-child {
+  margin-right: 0;
+}

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>twittler</title>
+  <link rel="stylesheet" href="assets/stylesheets/main.css">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,100,300' rel='stylesheet' type='text/css'>
+
+  <script src="jquery.js"></script>
+  <script src="moment.js"></script>
+  <script src="data_generator.js"></script>
+</head>
+
+<body>
+
+  <!-- Header -->
+
+  <header class="primary-header container group">
+
+    <h1 class="logo">
+      <a id="main-logo" href="index.html">twittler</a>
+    </h1>
+
+    <nav class="nav primary-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+      </ul>
+    </nav>
+
+  </header>
+
+  <!-- Main Body -->
+  <section class="primary-body">
+    <section class="body-upper">
+      <h2 class="body-header">
+        Home Feed
+      </h2>
+
+      <btn class="auto-update primary-button" onclick="autoUpdateBtn()">
+        Auto Update
+      </btn>
+
+      <btn class="refresh primary-button" onclick="refreshBtn()">
+        Refresh
+      </btn>
+    </section>
+
+    <div class="user-tweet-area">
+      <div class="tweet-img" alt="" onclick="sendTweet()"></div>
+      <input class="tweet-input" type="text" placeholder="What's on your mind?"
+                  value="" maxlength="140"></input>
+      <div class="arrow-img" alt="" onclick="sendTweet()"></div>
+    </div>
+    <ul class="tweet-list"></ul>
+
+
+    <script>
+
+
+    // Display all of the new tweets in reverse-chronologial order
+    function refreshFeed() {
+      var home = (currentUser == "Twittler");
+      var $body = $('.tweet-list');
+      clearFeed($body);
+      var stream = home ? streams.home : streams.users[currentUser];
+      var totalNumTweets = stream.length
+      for(var index = totalNumTweets - 1; index >= 0 && index > totalNumTweets - 15; index--) {
+        newTweet = makeTweet(stream, index);
+        newTweet.appendTo($body);
+      }
+    }
+
+    // use the tweet stream to create a tweet node
+    function makeTweet(stream, index) {
+
+      var tweet = stream[index];
+      // Create nodes for tweet
+      var $tweet = $("<li class='tweet-container'></li>");
+      var $handle = $("<a onclick='updateProfile.apply(this)' class='tweet-handle'></a>");
+      var $text = $("<div class='tweet-text'></div>");
+      var $timeStamp = $("<div class='time-stamp'></div>");
+
+      // Combine nodes
+      $handle.text('@' + tweet.user);
+      $text.text(tweet.message);
+      var tweetTime = new Date;
+      $timeStamp.text(moment(tweetTime).fromNow());
+      $handle.appendTo($tweet);
+      $text.appendTo($tweet);
+      $timeStamp.appendTo($tweet);
+
+      return $tweet;
+    }
+
+    // Change display to selected user
+    function updateProfile() {
+      currentUser = this.text.slice(1)
+      $('#main-logo').text(currentUser);
+      $('.body-header').text('@' + currentUser + "'" + 's Feed')
+      refreshFeed();
+    }
+
+    // Remove all nodes from a tag
+    // useful for udating stream
+    function clearFeed(nodeToClear) {
+      while (nodeToClear[0].firstChild) {
+        nodeToClear[0].removeChild(nodeToClear[0].firstChild);
+      }
+    }
+
+    // Button Hanlders
+    function refreshBtn() {
+      var $refresh = $(".refresh");
+      $refresh.css( "opacity", 0.1 );
+      refreshFeed();
+      $refresh.animate({
+        opacity: 1,
+      }, 500);
+    }
+
+    // Turn on or off the auto-update button
+    function autoUpdateBtn() {
+      $(".auto-update").toggleClass("pressed");
+      autoUpdate = !autoUpdate;
+      refresher = autoUpdate ? setInterval(refreshFeed, 200) : clearInterval(refresher);
+    }
+
+    // Make the enter button work as if the button had been clicked
+    $(".tweet-input").keyup(function(event){
+      if(event.keyCode == 13){
+        $(".arrow-img").click();
+      }
+    });
+
+    // Send a user generated tweet to the feed
+    function sendTweet() {
+      writeTweet($(".tweet-input")[0].value);
+      clearInputField();
+      refreshFeed();
+    }
+
+    // Clear the input field text region
+    function clearInputField(){
+      $(".tweet-input")[0].value = "";
+    }
+
+    //////////////////////////////////////
+    //            Main Script           //
+    //////////////////////////////////////
+    var currentUser = "Twittler";
+    var home = true;
+    var autoUpdate = false;
+    var refresher; // variable to hold the feed refresh
+
+    $(document).ready(refreshFeed);
+    if (autoUpdate) { refresher = setInterval(refreshFeed, 200); };
+
+    </script>
+
+  </section>
+
+  <!-- Footer -->
+
+  <footer class="primary-footer container group">
+
+    <small>&copy; Twittler 2015</small>
+
+    <nav class="nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+      </ul>
+    </nav>
+
+  </footer>
+
+</body>
+</html>
