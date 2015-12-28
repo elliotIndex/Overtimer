@@ -330,15 +330,25 @@ h1, h3, h4, h5, p {
   height: 200px;
 }
 
-.hours, .minutes, .seconds, .semicolon {
+.time-text, .semicolon {
   display: inline;
   line-height: 200px;
   font-size: 100px;
+}
 
+.time-text {
+  display: none;
 }
 
 .semicolon {
   font-size: 150px;
+}
+
+.time-display input {
+  width: 100px;
+  height: 100px;
+  font-size: 60px;
+  color: #e3e3e3;
 }
 
 /*

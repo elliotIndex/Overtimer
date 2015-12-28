@@ -39,119 +39,157 @@
         Home Feed
       </h2>
 
-      <btn class="Pause primary-button" onclick="toggleRunning()">
+      <btn class="Pause primary-button" onclick="pause()">
         Pause
       </btn>
 
-      <btn class="start-stop primary-button" onclick="initializeTimeLeft()">
-        Start/Stop
+      <btn class="start primary-button" onclick="start()">
+        Start
       </btn>
     </section>
 
 
     <section class="time-display">
-      <div class="hours">00</div>
+      <div class="hours time-text">00</div>
+      <input id="inputHours" type="number" name="inputHours" min="0" max="59" placeholder="00">
       <char class="semicolon">:</char>
-      <div class="minutes">00</div>
+      <div class="minutes time-text">00</div>
+      <input id="inputMins" type="number" name="inputMins"  min="0" max="59" placeholder="00">
       <char class="semicolon">:</char>
-      <div class="seconds">00</div>
+      <div class="seconds time-text">00</div>
+      <input id="inputSecs" type="number" name="inputSecs"  min="0" max="59" placeholder="00">
     </section>
-    <ul class="tweet-list"></ul>
+    <section class="time-input">
+    </section>
+
 
 
     <script>
 
-
     var displayTime = function(hours, minutes, seconds) {
-      $('.hours').text(hours);
-      $('.minutes').text(minutes);
-      $('.seconds').text(seconds);
+      $('.hours').text(runTime.hours);
+      $('.minutes').text(runTime.minutes);
+      $('.seconds').text(runTime.seconds);
     }
 
     var initializeTimeLeft = function () {
-      hrsLeft = inputHours;
-      minsLeft = inputMins;
-      secsLeft = inputSecs;
-      start();
+      runTime.seconds = +$("#inputSecs").val()%60;
+      runTime.minutes = +$("#inputMins").val()%60;
+      runTime.hours = +$("#inputHours").val();
     }
 
     var start = function () {
-      setEndTime(hrsLeft, minsLeft, secsLeft);
-      toggleRunning();
-    }
-
-    var setEndTime = function (hours, minutes, seconds) {
-      var endTimeMS = +now + 1000*(hours + 60*(minutes + (60*seconds)));
-      endTime = new Date(endTimeMS);
+      $('.start').text('Cancel');
+      $(".time-display").find("input").css("display", "none");
+      $(".time-text").css("display", "inline");
+      initializeTimeLeft();
+      displayTime();
+      resume();
     }
 
     var pause = function () {
-      now = new Date;
-      hrsLeft = endTime.getHours() - now.getHours();
-      minsLeft = endTime.getMinutes() - now.getMinutes();
-      secsLeft = endTime.getSeconds() - now.getSeconds();
-
-      toggleRunning();
+      refresher = clearInterval(refresher);
     }
 
-    var toggleRunning = function () {
-      $(".Pause").toggleClass("pressed")
-      running = !running;
-      running ? $(".Pause").text("Pause") : $(".Pause").text("Resume");
-      refresher = running ? setInterval(refreshTime, 1000) : clearInterval(refresher);
-      $(".")
+    var resume = function() {
+      refresher = setInterval(refreshTime, 1000);
     }
 
-    var refreshTime = function () {
-      now = Date.now();
-      var timeLeftMS = endTime - now;
-      if (timeLeftMS >= 0) {
-        var timeLeft = new Date(timeLeftMS);
-        displayTime(timeLeft.getHours()-16, timeLeft.getMinutes(), timeLeft.getSeconds());
+    var refreshTime = function() {
+      if (runTime.seconds == 0) {
+        if (runTime.minutes == 0){
+          if (runTime.hours == 0) {
+            enterOverTime();
+            runTime.seconds++;
+          } else {
+            runTime.hours--;
+            runTime.minutes = 59;
+            runTime.seconds = 59;
+          }
+        } else {
+          runTime.minutes--;
+          runTime.seconds = 59;
+        }
+
       } else {
-        overTime = true;
-        toggleRunning();
+        runTime.seconds--;
       }
+      displayTime();
     }
+
+    var enterOverTime = function() {
+      overTime = true;
+      $("body").css("background", "red");
+      $("body").css("background", " #9ad3de");
+      $("body").css("background", "-webkit-linear-gradient(to right, #89bdd3, #9ad3de)");
+      $("body").css("background", "-moz-linear-gradient(to right, #89bdd3, #9ad3de)");
+      $("body").css("background", "linear-gradient(to right, #FF1111, #FF6666)");
+      refresher = clearInterval(refresher);
+      refresher = setInterval(refreshOverTime, 1000);
+    }
+
+    var refreshOverTime = function() {
+      if (runTime.seconds == 59) {
+        if (runTime.minutes == 59){
+          runTime.hours++;
+          runTime.minutes = 00;
+          runTime.seconds = 00;
+        } else {
+          runTime.minutes++;
+          runTime.seconds = 00;
+        }
+      } else {
+        runTime.seconds++;
+      }
+      displayTime();
+    }
+
+
+    // Add 'enter' key funcitonality to time input
+    $(".time-display").find("input").keyup(function(event){
+      if(event.keyCode == 13){
+        start();
+      }
+    });
 
     //////////////////////////////////////
     //            Main Script           //
     //////////////////////////////////////
     var inputHours = 1;
-    var inputMins = 1;
+    var inputMins = 0;
     var inputSecs = 10;
 
-    var hrsLeft = 0;
-    var minsLeft = 0;
-    var secsLeft = 0;
+    var runTime = { hours: 0,
+      minutes: 0,
+      seconds: 0 };
 
-    var startTime;
-    var endTime;
-    var now = new Date;
-    var running = false;
-    var refresher;
-    var overTime = false;
+      var startTime;
+      var endTime;
+      var now = new Date;
+      var running = false;
+      var refresher;
+      var overTime = false;
 
-    $(document).ready();
-    if (running) { refresher = setInterval(refreshFeed, 200); };
+      $(document).ready();
+      if (running) {};
 
-    </script>
+      </script>
 
-  </section>
+    </section>
 
-  <!-- Footer -->
+    <!-- Footer -->
 
-  <footer class="primary-footer container group">
+    <footer class="primary-footer container group">
 
-    <small>&copy; Elliot Plant 2015</small>
+      <small>&copy; Elliot Plant 2015</small>
 
-    <nav class="nav">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-      </ul>
-    </nav>
+      <nav class="nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+      </nav>
 
-  </footer>
+    </footer>
 
-</body>
-</html>
+  </body>
+  </html>
