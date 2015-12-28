@@ -270,32 +270,6 @@ h1, h3, h4, h5, p {
   margin-top: 30px;
 }
 
-.primary-body .tweet-handle {
-  display: inline-block;
-  width: 200px;
-  margin: 7px 20px;
-  font-size: 20px;
-  color: #89eeee;
-  position: relative;
-  left: 0;
-  cursor: pointer;
-}
-
-.primary-body .tweet-text {
-  color: #EFF;
-  display: inline;
-  width: 400px;
-  padding-left: 20px;
-  text-align: center;
-}
-
-.primary-body .time-stamp {
-  color: rgba(255, 255, 255, 0.5);;
-  float: right;
-  margin: 7px 8px 0 0;
-  font-size: 12px;
-
-}
 
 /*
   ========================================
@@ -344,74 +318,28 @@ h1, h3, h4, h5, p {
 
 /*
   ========================================
-  User Tweets
+  Time Display
   ========================================
 */
-.user-tweet-area {
-  display: block;
-  height: 50px;
-  margin: 20px 40px 30px 40px;
-  border: 1px solid #EEE;
-  border-radius: 50px;
-}
-
-.tweet-input {
-  display: inline-block;
+.time-display {
+  display: table-cell;
+  padding-left: 35%;
+  padding-bottom: 5%;
   vertical-align: middle;
-  margin: 0 0 47px 0;
-  height: 40px;
-  width: 690px;
-  font: 300 16px/22px "Lato", "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  border: solid 1px #dcdcdc;
-  transition: box-shadow 0.3s, border 0.3s;
-
-  appearance: none;
-  box-shadow: none;
-  border-radius: 100px;
-  padding: 0 30px;
+  width: 500px;
+  height: 200px;
 }
 
-.tweet-input:focus {
-  outline: none;
-  border: solid 1px #707070;
-  box-shadow: 0 0 5px 1px #969696;
+.hours, .minutes, .seconds, .semicolon {
+  display: inline;
+  line-height: 200px;
+  font-size: 100px;
+
 }
 
-.tweet-img, .arrow-img {
-  display: inline-block;
-  content: "";
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  overflow: hidden;
-  text-indent: -9999;
+.semicolon {
+  font-size: 150px;
 }
-
-.tweet-img {
-  height: 52px;
-  width: 52px;
-  background: url("../images/twitterbirdsprite.png");
-  margin-left: 15px;
-}
-
-.tweet-img:hover {
-  background-position: -50px 0;
-}
-
-.arrow-img {
-  background: url("../images/sprite-arrow-nav.png");
-  margin-left: 15px;
-  height: 40px;
-  width: 40px;
-  margin: 0 0 7px 18px;
-  background-position: 0 -40px;
-}
-
-.arrow-img:hover {
-  background-position: 0 -120px;
-}
-
-
-
 
 /*
   ========================================

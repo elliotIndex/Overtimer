@@ -4,13 +4,14 @@
 <head>
   <meta charset="utf-8">
 
-  <title>twittler</title>
+  <title>Overtimer</title>
   <link rel="stylesheet" href="assets/stylesheets/main.css">
   <link href='https://fonts.googleapis.com/css?family=Lato:400,100,300' rel='stylesheet' type='text/css'>
 
   <script src="jquery.js"></script>
-  <script src="moment.js"></script>
   <script src="data_generator.js"></script>
+
+  <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/mosaicon-02/512/timer-512.png">
 </head>
 
 <body>
@@ -20,7 +21,7 @@
   <header class="primary-header container group">
 
     <h1 class="logo">
-      <a id="main-logo" href="index.html">twittler</a>
+      <a id="main-logo" href="index.html">Overtimer</a>
     </h1>
 
     <nav class="nav primary-nav">
@@ -38,124 +39,101 @@
         Home Feed
       </h2>
 
-      <btn class="auto-update primary-button" onclick="autoUpdateBtn()">
-        Auto Update
+      <btn class="Pause primary-button" onclick="toggleRunning()">
+        Pause
       </btn>
 
-      <btn class="refresh primary-button" onclick="refreshBtn()">
-        Refresh
+      <btn class="start-stop primary-button" onclick="initializeTimeLeft()">
+        Start/Stop
       </btn>
     </section>
 
-    <div class="user-tweet-area">
-      <div class="tweet-img" alt="" onclick="sendTweet()"></div>
-      <input class="tweet-input" type="text" placeholder="What's on your mind?"
-                  value="" maxlength="140"></input>
-      <div class="arrow-img" alt="" onclick="sendTweet()"></div>
-    </div>
+
+    <section class="time-display">
+      <div class="hours">00</div>
+      <char class="semicolon">:</char>
+      <div class="minutes">00</div>
+      <char class="semicolon">:</char>
+      <div class="seconds">00</div>
+    </section>
     <ul class="tweet-list"></ul>
 
 
     <script>
 
 
-    // Display all of the new tweets in reverse-chronologial order
-    function refreshFeed() {
-      var home = (currentUser == "Twittler");
-      var $body = $('.tweet-list');
-      clearFeed($body);
-      var stream = home ? streams.home : streams.users[currentUser];
-      var totalNumTweets = stream.length
-      for(var index = totalNumTweets - 1; index >= 0 && index > totalNumTweets - 15; index--) {
-        newTweet = makeTweet(stream, index);
-        newTweet.appendTo($body);
+    var displayTime = function(hours, minutes, seconds) {
+      $('.hours').text(hours);
+      $('.minutes').text(minutes);
+      $('.seconds').text(seconds);
+    }
+
+    var initializeTimeLeft = function () {
+      hrsLeft = inputHours;
+      minsLeft = inputMins;
+      secsLeft = inputSecs;
+      start();
+    }
+
+    var start = function () {
+      setEndTime(hrsLeft, minsLeft, secsLeft);
+      toggleRunning();
+    }
+
+    var setEndTime = function (hours, minutes, seconds) {
+      var endTimeMS = +now + 1000*(hours + 60*(minutes + (60*seconds)));
+      endTime = new Date(endTimeMS);
+    }
+
+    var pause = function () {
+      now = new Date;
+      hrsLeft = endTime.getHours() - now.getHours();
+      minsLeft = endTime.getMinutes() - now.getMinutes();
+      secsLeft = endTime.getSeconds() - now.getSeconds();
+
+      toggleRunning();
+    }
+
+    var toggleRunning = function () {
+      $(".Pause").toggleClass("pressed")
+      running = !running;
+      running ? $(".Pause").text("Pause") : $(".Pause").text("Resume");
+      refresher = running ? setInterval(refreshTime, 1000) : clearInterval(refresher);
+      $(".")
+    }
+
+    var refreshTime = function () {
+      now = Date.now();
+      var timeLeftMS = endTime - now;
+      if (timeLeftMS >= 0) {
+        var timeLeft = new Date(timeLeftMS);
+        displayTime(timeLeft.getHours()-16, timeLeft.getMinutes(), timeLeft.getSeconds());
+      } else {
+        overTime = true;
+        toggleRunning();
       }
-    }
-
-    // use the tweet stream to create a tweet node
-    function makeTweet(stream, index) {
-
-      var tweet = stream[index];
-      // Create nodes for tweet
-      var $tweet = $("<li class='tweet-container'></li>");
-      var $handle = $("<a onclick='updateProfile.apply(this)' class='tweet-handle'></a>");
-      var $text = $("<div class='tweet-text'></div>");
-      var $timeStamp = $("<div class='time-stamp'></div>");
-
-      // Combine nodes
-      $handle.text('@' + tweet.user);
-      $text.text(tweet.message);
-      var tweetTime = new Date;
-      $timeStamp.text(moment(tweetTime).fromNow());
-      $handle.appendTo($tweet);
-      $text.appendTo($tweet);
-      $timeStamp.appendTo($tweet);
-
-      return $tweet;
-    }
-
-    // Change display to selected user
-    function updateProfile() {
-      currentUser = this.text.slice(1)
-      $('#main-logo').text(currentUser);
-      $('.body-header').text('@' + currentUser + "'" + 's Feed')
-      refreshFeed();
-    }
-
-    // Remove all nodes from a tag
-    // useful for udating stream
-    function clearFeed(nodeToClear) {
-      while (nodeToClear[0].firstChild) {
-        nodeToClear[0].removeChild(nodeToClear[0].firstChild);
-      }
-    }
-
-    // Button Hanlders
-    function refreshBtn() {
-      var $refresh = $(".refresh");
-      $refresh.css( "opacity", 0.1 );
-      refreshFeed();
-      $refresh.animate({
-        opacity: 1,
-      }, 500);
-    }
-
-    // Turn on or off the auto-update button
-    function autoUpdateBtn() {
-      $(".auto-update").toggleClass("pressed");
-      autoUpdate = !autoUpdate;
-      refresher = autoUpdate ? setInterval(refreshFeed, 200) : clearInterval(refresher);
-    }
-
-    // Make the enter button work as if the button had been clicked
-    $(".tweet-input").keyup(function(event){
-      if(event.keyCode == 13){
-        $(".arrow-img").click();
-      }
-    });
-
-    // Send a user generated tweet to the feed
-    function sendTweet() {
-      writeTweet($(".tweet-input")[0].value);
-      clearInputField();
-      refreshFeed();
-    }
-
-    // Clear the input field text region
-    function clearInputField(){
-      $(".tweet-input")[0].value = "";
     }
 
     //////////////////////////////////////
     //            Main Script           //
     //////////////////////////////////////
-    var currentUser = "Twittler";
-    var home = true;
-    var autoUpdate = false;
-    var refresher; // variable to hold the feed refresh
+    var inputHours = 1;
+    var inputMins = 1;
+    var inputSecs = 10;
 
-    $(document).ready(refreshFeed);
-    if (autoUpdate) { refresher = setInterval(refreshFeed, 200); };
+    var hrsLeft = 0;
+    var minsLeft = 0;
+    var secsLeft = 0;
+
+    var startTime;
+    var endTime;
+    var now = new Date;
+    var running = false;
+    var refresher;
+    var overTime = false;
+
+    $(document).ready();
+    if (running) { refresher = setInterval(refreshFeed, 200); };
 
     </script>
 
@@ -165,7 +143,7 @@
 
   <footer class="primary-footer container group">
 
-    <small>&copy; Twittler 2015</small>
+    <small>&copy; Elliot Plant 2015</small>
 
     <nav class="nav">
       <ul>
