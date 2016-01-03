@@ -9,26 +9,27 @@
   <link href='https://fonts.googleapis.com/css?family=Lato:400,100,300' rel='stylesheet' type='text/css'>
 
   <script src="jquery.js"></script>
-  <script src="data_generator.js"></script>
 
   <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/mosaicon-02/512/timer-512.png">
+
 </head>
 
 <body>
+  <div class="body-div">
+  <!-- Audio -->
+  <audio loop="false">
+    <source src="assets/sounds/Ding-sound-effect.wav" type="audio/wav" />
+    <embed hidden="true" autostart="true" loop="false" src="assets/sounds/Ding-sound-effect.wav" />
+  </audio>
 
   <!-- Header -->
 
   <header class="primary-header container group">
 
     <h1 class="logo">
-      <a id="main-logo" href="index.html">Overtimer</a>
+      <div id="main-logo">Overtimer</div>
     </h1>
 
-    <nav class="nav primary-nav">
-      <ul>
-        <li><a href="index.html">Home</a></li>
-      </ul>
-    </nav>
 
   </header>
 
@@ -36,14 +37,14 @@
   <section class="primary-body">
     <section class="body-upper">
       <h2 class="body-header">
-        Home Feed
+        Enter Time
       </h2>
 
-      <btn class="Pause primary-button" onclick="pause()">
+      <btn class="btn1 primary-button" onclick="pause()">
         Pause
       </btn>
 
-      <btn class="start primary-button" onclick="start()">
+      <btn class="btn2 primary-button" onclick="start()">
         Start
       </btn>
     </section>
@@ -51,13 +52,19 @@
 
     <section class="time-display">
       <div class="hours time-text">00</div>
-      <input id="inputHours" type="number" name="inputHours" min="0" max="59" placeholder="00">
+      <input id="inputHours" type="number" name="inputHours" min="0" max="59"
+                placeholder="h" onfocus="this.placeholder = ''"
+                onblur="this.placeholder = 'h'"/>
       <char class="semicolon">:</char>
       <div class="minutes time-text">00</div>
-      <input id="inputMins" type="number" name="inputMins"  min="0" max="59" placeholder="00">
+      <input id="inputMins" type="number" name="inputMins"  min="0" max="59"
+                placeholder="m" onfocus="this.placeholder = ''"
+                onblur="this.placeholder = 'm'"/>
       <char class="semicolon">:</char>
       <div class="seconds time-text">00</div>
-      <input id="inputSecs" type="number" name="inputSecs"  min="0" max="59" placeholder="00">
+      <input id="inputSecs" type="number" name="inputSecs"  min="0" max="59"
+                placeholder="s" onfocus="this.placeholder = ''"
+                onblur="this.placeholder = 's'"/>
     </section>
     <section class="time-input">
     </section>
@@ -67,9 +74,13 @@
     <script>
 
     var displayTime = function(hours, minutes, seconds) {
-      $('.hours').text(runTime.hours);
-      $('.minutes').text(runTime.minutes);
-      $('.seconds').text(runTime.seconds);
+      $('.hours').text(disp2Digits(runTime.hours));
+      $('.minutes').text(disp2Digits(runTime.minutes));
+      $('.seconds').text(disp2Digits(runTime.seconds));
+    }
+
+    var disp2Digits = function(num) {
+      return ("0" + num).slice(-2);
     }
 
     var initializeTimeLeft = function () {
@@ -79,7 +90,9 @@
     }
 
     var start = function () {
-      $('.start').text('Cancel');
+      $('.btn2').text('Cancel').attr("onclick", "cancel()");
+      $('.btn1').css('display', 'inline');
+      $('.body-header').text('Counting Down')
       $(".time-display").find("input").css("display", "none");
       $(".time-text").css("display", "inline");
       initializeTimeLeft();
@@ -87,13 +100,35 @@
       resume();
     }
 
-    var pause = function () {
+    var cancel = function () {
+      $('.btn2').text('Start').attr("onclick", "start()");
+      $('.body-header').text('Enter Time')
+      $('.btn1').css('display', 'none');
+      $(".time-display input").css("display", "inline");
+      $(".time-text").css("display", "none");
+      $("#inputHours").val("");
+      $("#inputMins").val("");
+      $("#inputSecs").val("");
+      if (overTime) {
+        overTime = false;
+        $('body').toggleClass("body-overtime", 2000);
+      }
       refresher = clearInterval(refresher);
+      soundRefresh = clearInterval(soundRefresh);
+      sound.pause();
     }
 
+    var pause = function () {
+      refresher = clearInterval(refresher);
+      $(".btn1").text("Resume").attr("onclick", "resume()");
+      $('.body-header').text('Paused')
+    };
+
     var resume = function() {
-      refresher = setInterval(refreshTime, 1000);
-    }
+      refresher = overTime ? setInterval(refreshOverTime, 1000): setInterval(refreshTime, 1000);
+      $(".btn1").text("Pause").attr("onclick", "pause()");
+      $('.body-header').text('Counting Down')
+    };
 
     var refreshTime = function() {
       if (runTime.seconds == 0) {
@@ -115,18 +150,18 @@
         runTime.seconds--;
       }
       displayTime();
-    }
+    };
 
     var enterOverTime = function() {
       overTime = true;
-      $("body").css("background", "red");
-      $("body").css("background", " #9ad3de");
-      $("body").css("background", "-webkit-linear-gradient(to right, #89bdd3, #9ad3de)");
-      $("body").css("background", "-moz-linear-gradient(to right, #89bdd3, #9ad3de)");
-      $("body").css("background", "linear-gradient(to right, #FF1111, #FF6666)");
+      $('body').toggleClass("body-overtime", 2000);
       refresher = clearInterval(refresher);
       refresher = setInterval(refreshOverTime, 1000);
-    }
+      playSound();
+      soundRefresh = setInterval(playSound,7000);
+      $('.body-header').text('Overtime')
+      $(".audio").attr("loop")
+    };
 
     var refreshOverTime = function() {
       if (runTime.seconds == 59) {
@@ -142,9 +177,12 @@
         runTime.seconds++;
       }
       displayTime();
+    };
+
+    var playSound = function (){
+      sound.play();
+      sound.currentTime = 0;
     }
-
-
     // Add 'enter' key funcitonality to time input
     $(".time-display").find("input").keyup(function(event){
       if(event.keyCode == 13){
@@ -152,44 +190,47 @@
       }
     });
 
+    $('body').keyup(function(event){
+      if(event.keyCode == 32 && running){
+        pause();
+      } else if (event.keyCode == 27 && running) {
+        console.log("canceling");
+        cancel();
+      }
+    })
+
     //////////////////////////////////////
     //            Main Script           //
     //////////////////////////////////////
+    var sound = new Audio('assets/sounds/Ding-sound-effect.wav');
     var inputHours = 1;
     var inputMins = 0;
     var inputSecs = 10;
 
     var runTime = { hours: 0,
       minutes: 0,
-      seconds: 0 };
+      seconds: 0
+    };
 
-      var startTime;
-      var endTime;
-      var now = new Date;
-      var running = false;
-      var refresher;
-      var overTime = false;
+    var startTime;
+    var endTime;
+    var now = new Date;
+    var running = false;
+    var refresher;
+    var soundRefresh;
+    var overTime = false;
 
-      $(document).ready();
-      if (running) {};
+    </script>
 
-      </script>
+  </section>
 
-    </section>
+  <!-- Footer -->
 
-    <!-- Footer -->
+  <footer class="primary-footer container group">
 
-    <footer class="primary-footer container group">
+    <small>&copy; Elliot Plant 2015</small>
 
-      <small>&copy; Elliot Plant 2015</small>
-
-      <nav class="nav">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-        </ul>
-      </nav>
-
-    </footer>
-
-  </body>
-  </html>
+  </footer>
+</div>
+</body>
+</html>
